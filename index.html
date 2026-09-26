@@ -39,13 +39,22 @@
     app.appendChild(link(target, "Ouvrir dans Quantfury"));
     setTimeout(function () { location.href = target; }, 150);
   } else {
-    app.innerHTML = '<h1>Test des liens Quantfury</h1><p>Touche chaque bouton. Note ceux qui ouvrent l\'application, et ce qu\'elle affiche.</p>';
-    app.appendChild(link("quantfury://", "quantfury://  (ouvre l'app ?)"));
-    FORMATS.forEach(function (f) {
-      app.appendChild(link("quantfury://" + f + "/AAPL", "quantfury://" + f + "/AAPL", "alt"));
-    });
-    app.appendChild(link("quantfury://open?symbol=AAPL", "quantfury://open?symbol=AAPL", "alt"));
-    app.appendChild(link("?s=AAPL", "Tester la redirection automatique (AAPL)", "alt"));
+    var OL = "https://quantfury.onelink.me/";
+    var TEMPLATES = "0ddr mR4D A5Ls GDFi 3KPP zPhZ tJue 2lYm XjO4 jVI7 yhSw NNaK czWO dbXI n5K0 3r8P o1RE F9Yy yYzQ tUZN ASDv 3T2k TCnv oZVk qev9 Ai85".split(" ");
+    var PARAMS = [
+      "deep_link_value=AAPL",
+      "deep_link_value=instrument&deep_link_sub1=AAPL",
+      "deep_link_value=trade&deep_link_sub1=AAPL",
+      "deep_link_value=symbol&deep_link_sub1=AAPL",
+      "deep_link_value=AAPL&deep_link_sub1=AAPL"
+    ];
+    app.innerHTML = '<h1>Liens Quantfury</h1><p>Touche chaque bouton. Note ceux qui ouvrent l’app, et l’écran affiché.</p><h1 style="font-size:17px;margin-top:22px">A. Paramètres (modèle 0ddr)</h1>';
+    PARAMS.forEach(function (q) { app.appendChild(link(OL + "0ddr/test?" + q, q, "alt")); });
+    var h = document.createElement("h1");
+    h.style.fontSize = "17px"; h.style.marginTop = "22px";
+    h.textContent = "B. Les 26 modèles (sans paramètre)";
+    app.appendChild(h);
+    TEMPLATES.forEach(function (t) { app.appendChild(link(OL + t + "/test", "/" + t + "/test", "alt")); });
   }
 </script>
 </body>
