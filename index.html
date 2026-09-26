@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ouvrir Quantfury</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; padding: 24px 18px; background: #0d1117; color: #e6edf3; font: 16px/1.5 -apple-system, system-ui, sans-serif; }
+  main { max-width: 480px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  p { color: #9da7b3; margin: 6px 0 18px; }
+  a.btn { display: block; padding: 14px 16px; margin: 10px 0; border-radius: 12px; background: #1f6feb; color: #fff; text-decoration: none; font-weight: 600; text-align: center; }
+  a.alt { background: #21262d; font-weight: 500; text-align: left; font-family: ui-monospace, monospace; font-size: 14px; }
+  .sym { font-size: 34px; font-weight: 700; text-align: center; margin: 18px 0 4px; }
+  .hint { font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+  var FORMATS = ["instrument", "trade", "symbol", "asset", "instruments", "markets"];
+  var q = new URLSearchParams(location.search);
+  var app = document.getElementById("app");
+  var sym = (q.get("s") || "").replace(/[^A-Za-z0-9._!\/-]/g, "").slice(0, 24);
+  var fmt = FORMATS.indexOf(q.get("f")) >= 0 ? q.get("f") : "instrument";
+
+  function link(href, text, cls) {
+    var a = document.createElement("a");
+    a.href = href; a.textContent = text; a.className = "btn " + (cls || "");
+    return a;
+  }
+
+  if (sym) {
+    var target = "quantfury://" + fmt + "/" + encodeURIComponent(sym);
+    app.innerHTML = '<h1>Ouvrir Quantfury</h1><div class="sym"></div><p class="hint">Si rien ne s\'ouvre, touche le bouton, puis cherche ce ticker dans l\'app.</p>';
+    app.querySelector(".sym").textContent = sym;
+    app.appendChild(link(target, "Ouvrir dans Quantfury"));
+    setTimeout(function () { location.href = target; }, 150);
+  } else {
+    app.innerHTML = '<h1>Test des liens Quantfury</h1><p>Touche chaque bouton. Note ceux qui ouvrent l\'application, et ce qu\'elle affiche.</p>';
+    app.appendChild(link("quantfury://", "quantfury://  (ouvre l'app ?)"));
+    FORMATS.forEach(function (f) {
+      app.appendChild(link("quantfury://" + f + "/AAPL", "quantfury://" + f + "/AAPL", "alt"));
+    });
+    app.appendChild(link("quantfury://open?symbol=AAPL", "quantfury://open?symbol=AAPL", "alt"));
+    app.appendChild(link("?s=AAPL", "Tester la redirection automatique (AAPL)", "alt"));
+  }
+</script>
+</body>
+</html>
